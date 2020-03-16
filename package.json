@@ -1,5 +1,5 @@
 {
-  "name": "covid_bot",
+  "name": "covid19-discord-bot",
   "version": "1.0.0",
   "description": "Discord bot that sends updates about COVID-19",
   "main": "index.js",
@@ -14,17 +14,24 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jalbertsr/covid19-discord-bot.git"
   },
   "keywords": [
     "covid",
     "covid19",
     "covid-19",
-    "sars-covid-2",
+    "sars-cov-2",
     "bot",
-    "discord"
+    "discord",
+    "discord-js"
   ],
   "author": "Joan Albert Segura Rueda",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jalbertsr/covid19-discord-bot/issues"
+  }
 }
