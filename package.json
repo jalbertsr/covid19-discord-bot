@@ -1,0 +1,30 @@
+{
+  "name": "covid_bot",
+  "version": "1.0.0",
+  "description": "Discord bot that sends updates about COVID-19",
+  "main": "index.js",
+  "dependencies": {
+    "cron": "^1.8.2",
+    "discord.js": "^12.0.2",
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "covid",
+    "covid19",
+    "covid-19",
+    "sars-covid-2",
+    "bot",
+    "discord"
+  ],
+  "author": "Joan Albert Segura Rueda",
+  "license": "ISC"
+}
