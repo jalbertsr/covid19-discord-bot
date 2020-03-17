@@ -9,11 +9,12 @@ const { formatter } = require("./helpers");
 
 const client = new Discord.Client();
 
-const job = new CronJob("0 0 */5 * 3-4 *", async () => {
+const job = new CronJob("0 0 */3 * * *", async () => {
   const data = await fetchGloablData();
   const channel = client.channels.cache.get(CHANNEL_ID);
   const textToSend = formatter(data, "Global");
   channel.send(textToSend);
+  console.log("Cron job executed at:", new Date())
 });
 
 client.on('ready', () => {
