@@ -7,10 +7,10 @@ const checkCountry = async (country) => {
     const iso = countries["iso3"]
     const iso2 = Object.keys(iso);
     const iso3 = Object.values(iso);
-    isValidCountry = iso2.includes(country) || iso3.includes(country); 
+    isValidCountry = [...iso2, ...iso3].map(country => country.toUpperCase()).includes(country); 
   } else if (country.length >= 4) {
     const countryList = Object.keys(countries["countries"]);
-    isValidCountry = countryList.includes(country)
+    isValidCountry = countryList.map(country => country.toUpperCase()).includes(country)
   } else {
     isValidCountry = false;
   }

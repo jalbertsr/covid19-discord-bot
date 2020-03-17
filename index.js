@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { BOT_TOKEN, CHANNEL_ID } = process.env
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const CronJob = require("cron").CronJob;
 
 const { fetchGloablData } = require("./apiService");
@@ -24,7 +24,12 @@ client.on('ready', () => {
 
 client.on("message", async (receivedMessage) => {
   if (receivedMessage.content.startsWith("!covid")) {
-    await processCommand(receivedMessage);
+    try {
+      await processCommand(receivedMessage);
+      console.log(`Command: [${receivedMessage.content}] executed. `);
+    } catch (e) {
+      console.error(e);
+    }
   }
 });
 
