@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { BOT_TOKEN, CHANNEL_ID } = process.env
 const Discord = require("discord.js");
+const levenshtein = require("js-levenshtein");
 const CronJob = require("cron").CronJob;
 
 const { fetchGloablData } = require("./apiService");
@@ -24,10 +25,15 @@ client.on('ready', () => {
 });
 
 client.on("message", async (receivedMessage) => {
-  if (receivedMessage.content.startsWith("!covid")) {
+  const msg = receivedMessage.content;
+  const mainCommand = "!covid";
+  if (levenshtein(msg, mainCommand) <= 2) {
+      receivedMessage.channel.send("I don't understand the command. Try `!covid help`");
+  };
+  if (msg.startsWith(mainCommand)) {
     try {
       await processCommand(receivedMessage);
-      console.log(`Command: [${receivedMessage.content}] executed. `);
+      console.log(`Command: [${msg}] executed.`);
     } catch (e) {
       console.error(e);
     }

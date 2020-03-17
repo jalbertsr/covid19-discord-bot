@@ -21,7 +21,6 @@ const processCommand = async (receivedMessage) => {
 }
 
 const helpMsg = receivedMessage => receivedMessage.channel.send("Use command like `!covid <country>`. Example `!covid USA`.")
-const errorMsg = receivedMessage => receivedMessage.channel.send("I don't understand the command. Try `!covid help`");
 const invalidCountryMsg = receivedMessage => receivedMessage.channel.send("This country dosen't exist or in not on our database ヾ( ･`⌓´･)ﾉﾞ");
 
 module.exports = processCommand;
