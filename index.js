@@ -4,7 +4,7 @@ const Discord = require("discord.js");
 const levenshtein = require("js-levenshtein");
 const CronJob = require("cron").CronJob;
 
-const { fetchGloablData } = require("./apiService");
+const { fetchGloablData, downloadImage } = require("./apiService");
 const processCommand = require("./commands");
 const { formatter } = require("./helpers");
 
@@ -14,7 +14,11 @@ const job = new CronJob("0 0 */3 * * *", async () => {
   const data = await fetchGloablData();
   const channel = client.channels.cache.get(CHANNEL_ID);
   const textToSend = formatter(data, "Global");
-  channel.send(textToSend);
+  const unixTimeAsHash = +new Date()
+  await downloadImage(unixTimeAsHash);
+  const imagePath = `./images/global_graphic_${unixTimeAsHash}.png`
+  const attachment = new Discord.MessageAttachment(imagePath)
+  channel.send(textToSend, attachment);
   console.log("Cron job executed at:", new Date())
 });
 
@@ -26,8 +30,9 @@ client.on('ready', () => {
 
 client.on("message", async (receivedMessage) => {
   const msg = receivedMessage.content;
+  const [ firstArg ] = msg.split(" ");
   const mainCommand = "!covid";
-  if (levenshtein(msg, mainCommand) <= 2) {
+  if (levenshtein(firstArg, mainCommand) <= 2 && firstArg !== mainCommand) {
       receivedMessage.channel.send("I don't understand the command. Try `!covid help`");
   };
   if (msg.startsWith(mainCommand)) {
