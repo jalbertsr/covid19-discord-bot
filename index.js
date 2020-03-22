@@ -1,5 +1,6 @@
 require("dotenv").config();
-const { BOT_TOKEN, CHANNEL_ID } = process.env
+const path = require('path');
+const fse = require('fs-extra')
 const Discord = require("discord.js");
 const levenshtein = require("js-levenshtein");
 const CronJob = require("cron").CronJob;
@@ -8,9 +9,11 @@ const { fetchGloablData, downloadImage } = require("./apiService");
 const processCommand = require("./commands");
 const { formatter } = require("./helpers");
 
+const { BOT_TOKEN, CHANNEL_ID } = process.env
+
 const client = new Discord.Client();
 
-const job = new CronJob("0 0 */3 * * *", async () => {
+const job = new CronJob("0 0 */8 * * *", async () => {
   const data = await fetchGloablData();
   const channel = client.channels.cache.get(CHANNEL_ID);
   const textToSend = formatter(data, "Global");
@@ -22,10 +25,20 @@ const job = new CronJob("0 0 */3 * * *", async () => {
   console.log("Cron job executed at:", new Date())
 });
 
+const cleanJob = new CronJob("0 0 12 * * *", async () => {
+  try {
+    await fse.emptyDir("./images");
+    console.log("Clean job executed with success.");
+  } catch (err) {
+    console.error("Clean job failed with error", err);
+  }
+});
+
 client.on('ready', () => {
   console.log('I am ready!');
   console.log('Cron job starting...')
   job.start();
+  cleanJob.start();
 });
 
 client.on("message", async (receivedMessage) => {
