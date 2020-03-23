@@ -25,7 +25,7 @@ const job = new CronJob("0 0 */8 * * *", async () => {
   console.log("Cron job executed at:", new Date())
 });
 
-const cleanJob = new CronJob("0 0 12 * * *", async () => {
+const cleanJob = new CronJob("0 0 0 * * *", async () => {
   try {
     await fse.emptyDir("./images");
     console.log("Clean job executed with success.");
