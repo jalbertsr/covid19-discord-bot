@@ -1,16 +1,14 @@
 const { fetchData, fetchCountries } = require("./apiService");
 
 const checkCountry = async (country) => {
-  const countries = await fetchCountries();
+  const { countries: countryList } = await fetchCountries();
   let isValidCountry = false;
   if (country.length === 2 || country.length === 3) {
-    const iso = countries["iso3"]
-    const iso2 = Object.keys(iso);
-    const iso3 = Object.values(iso);
-    isValidCountry = [...iso2, ...iso3].map(country => country.toUpperCase()).includes(country); 
+    const iso2List = countryList.map(country => country.iso2);
+    const iso3List = countryList.map(country => country.iso3);
+    isValidCountry = [...iso2List, ...iso3List].filter(iso => iso).includes(country);    
   } else if (country.length >= 4) {
-    const countryList = Object.keys(countries["countries"]);
-    isValidCountry = countryList.map(country => country.toUpperCase()).includes(country)
+    isValidCountry = countryList.map(country => country.name.toUpperCase()).includes(country);
   } else {
     isValidCountry = false;
   }
