@@ -4,22 +4,26 @@
 
 Discord bot that sends periodically updates about COVID-19.
 
-### Commands 
+### Commands
 
-Comand format: 
+Comand format:
 
-```
-!covid <country> 
+```markdown
+!covid <country>
 ```
 
 example: `!covid USA` , `!covid italy`
 
 Other available commands:
 
-```
+```markdown
 !covid help
 ```
 
-```
+```markdown
 !covid global
+```
+
+```markdown
+!covid leadboard <infected|deaths|recovered>
 ```

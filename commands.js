@@ -1,20 +1,21 @@
 const Discord = require("discord.js");
 const { fetchDataByCountry, fetchGloablData, downloadImage } = require("./apiService");
-const { checkCountry, formatter, imageConverterPath } = require("./helpers");
+const { checkCountry, formatter, cleanInput } = require("./helpers");
 
 const processCommand = async (receivedMessage) => {
-  const splitCommand = receivedMessage.content.split(" ");
-  const [ primaryCommand, argument ] = splitCommand;
-
-  if (argument.toLowerCase() === "help") {
+  const [, ...argument] = receivedMessage.content.split(" ");
+  const cleanArg = argument.length === 1 ? argument.join("") : argument.join(" ")
+  if (cleanArg === "help") {
     helpMsg(receivedMessage);
-  } else if (argument.toLowerCase() === "global") {
+  } else if (cleanArg === "global") {
     const data = await fetchGloablData();
     const unixTimeAsHash = +new Date()
     await downloadImage(unixTimeAsHash);
     gloablMsg(receivedMessage, data, unixTimeAsHash);
+  } else if (cleanArg === "leadboard") {
+    leadboardMsg(receivedMessage);
   } else {
-    const country = argument.toUpperCase();
+    const country = cleanInput(cleanArg);
     const isValidCountry = await checkCountry(country);
     if (isValidCountry) {
       const data = await fetchDataByCountry(country);
@@ -26,6 +27,7 @@ const processCommand = async (receivedMessage) => {
   }
 }
 
+const leadboardMsg = receivedMessage => receivedMessage.channel.send("This feature is under development. It will be ready soon (งツ)ว")
 const helpMsg = receivedMessage => receivedMessage.channel.send("Use command like `!covid <country>`. Example `!covid USA`.")
 const invalidCountryMsg = receivedMessage => receivedMessage.channel.send("This country dosen't exist or in not on our database ヾ( ･`⌓´･)ﾉﾞ");
 const gloablMsg = (receivedMessage, data, unixTimeAsHash) => {

@@ -1,14 +1,14 @@
 const { fetchData, fetchCountries } = require("./apiService");
 
-const checkCountry = async (country) => {
+const checkCountry = async (inputCountry) => {
   const { countries: countryList } = await fetchCountries();
   let isValidCountry = false;
-  if (country.length === 2 || country.length === 3) {
+  if (inputCountry.length === 2 || inputCountry.length === 3) {
     const iso2List = countryList.map(country => country.iso2);
     const iso3List = countryList.map(country => country.iso3);
-    isValidCountry = [...iso2List, ...iso3List].filter(iso => iso).includes(country);    
-  } else if (country.length >= 4) {
-    isValidCountry = countryList.map(country => country.name.toUpperCase()).includes(country);
+    isValidCountry = [...iso2List, ...iso3List].filter(iso => iso).includes(inputCountry);    
+  } else if (inputCountry.length >= 4) {
+    isValidCountry = countryList.map(country => cleanInput(country.name)).includes(inputCountry);
   } else {
     isValidCountry = false;
   }
@@ -21,5 +21,6 @@ const formatter = (data, country) =>
 - Recovered: ${data.recovered.value}
 - Deaths: ${data.deaths.value}`;
 
+const cleanInput = input => input.toUpperCase().trim()
 
-module.exports = { checkCountry, formatter };
+module.exports = { checkCountry, cleanInput, formatter };
