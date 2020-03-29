@@ -1,4 +1,4 @@
-const { fetchData, fetchCountries } = require("./apiService");
+const { fetchData, fetchCountries, fetchInfectedByCountry } = require("./apiService");
 
 const checkCountry = async (inputCountry) => {
   const { countries: countryList } = await fetchCountries();
@@ -21,6 +21,21 @@ const formatter = (data, country) =>
 - Recovered: ${data.recovered.value}
 - Deaths: ${data.deaths.value}`;
 
+const createLeadboard async () => {
+  const { countries: countryList } = await fetchCountries();
+  const iso2List = countryList.map(country => { if ("iso2" in country) return fetchInfectedByCountry(country.iso2) });
+  const allCountries = await Promise.all(iso2List);
+  return allCountries.map(([ country ]) => ({ "country": country.countryRegion, value: country.confirmed}).sort((a, b) => a.value - b.value).slice(0, 9)
+};
+
+const formatLeadboard = leadboard => ({
+  color: 3447003,
+  title: "Leadboard",
+  description: "Top 10 countries with more confirmed covid-19 total infected cases.",
+  fields: leadboard.map((country, i) => ({ name: `${i}. ${country.name} - ${country.value}`})),
+  timestamp: new Date(),
+})
+
 const cleanInput = input => input.toUpperCase().trim()
 
-module.exports = { checkCountry, cleanInput, formatter };
+module.exports = { checkCountry, cleanInput, formatter, formatLeadboard, createLeadboard };
