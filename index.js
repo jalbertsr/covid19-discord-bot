@@ -13,7 +13,7 @@ const { BOT_TOKEN, CHANNEL_ID } = process.env
 
 const client = new Discord.Client();
 
-const job = new CronJob("0 0 */8 * * *", async () => {
+const job = new CronJob("0 0 0 * * 6", async () => {
   const data = await fetchGloablData();
   const channel = client.channels.cache.get(CHANNEL_ID);
   const textToSend = formatter(data, "Global");
@@ -25,7 +25,7 @@ const job = new CronJob("0 0 */8 * * *", async () => {
   console.log("Cron job executed at:", new Date())
 });
 
-const cleanJob = new CronJob("0 0 0 * * *", async () => {
+const cleanJob = new CronJob("0 0 0 1 * *", async () => {
   try {
     await fse.emptyDir("./images");
     console.log("Clean job executed with success.");

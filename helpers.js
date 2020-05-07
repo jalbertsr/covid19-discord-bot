@@ -1,4 +1,4 @@
-const { fetchData, fetchCountries, fetchInfectedByCountry } = require("./apiService");
+const { fetchData, fetchCountries, fetchDataByCountry } = require("./apiService");
 
 const checkCountry = async (inputCountry) => {
   const { countries: countryList } = await fetchCountries();
@@ -21,18 +21,28 @@ const formatter = (data, country) =>
 - Recovered: ${data.recovered.value}
 - Deaths: ${data.deaths.value}`;
 
-const createLeadboard async () => {
+const createLeadboard = async () => {
   const { countries: countryList } = await fetchCountries();
-  const iso2List = countryList.map(country => { if ("iso2" in country) return fetchInfectedByCountry(country.iso2) });
+  const iso2List = await countryList.map(async (country) => { if ("iso2" in country) return await fetchDataByCountry(country.iso2, true) });
   const allCountries = await Promise.all(iso2List);
-  return allCountries.map(([ country ]) => ({ "country": country.countryRegion, value: country.confirmed}).sort((a, b) => a.value - b.value).slice(0, 9)
+  return allCountries.filter(i => Boolean(i)).map(country => {
+    if (country.name && country.response) {
+      const { confirmed, recovered, deaths } = country.response;
+      if (confirmed && recovered && deaths) {
+        return ({ name: country.name, confirmed: confirmed.value, recovered: recovered.value, deaths: deaths.value })
+      }
+    }
+  }).filter(country => country).filter(country => country.name && country.confirmed).sort((a, b) => b.confirmed - a.confirmed).slice(0, 10);
 };
 
 const formatLeadboard = leadboard => ({
   color: 3447003,
   title: "Leadboard",
   description: "Top 10 countries with more confirmed covid-19 total infected cases.",
-  fields: leadboard.map((country, i) => ({ name: `${i}. ${country.name} - ${country.value}`})),
+  fields: leadboard.map((country, i) => ({ 
+    name: `**__${i+1}. ${country.name}__**`, 
+    value: `Infected: ${country.confirmed} - Recovered: ${country.recovered} - Deaths: ${country.deaths}`
+  })),
   timestamp: new Date(),
 })
 
