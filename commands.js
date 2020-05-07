@@ -14,7 +14,6 @@ const processCommand = async (receivedMessage) => {
     gloablMsg(receivedMessage, data, unixTimeAsHash);
   } else if (cleanArg === "leadboard") {
     const leadboard = await createLeadboard();
-    console.log(leadboard);
     const formattedLeadboard = formatLeadboard(leadboard);
     leadboardMsg(receivedMessage, formattedLeadboard);
   } else {
