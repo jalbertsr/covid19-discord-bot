@@ -25,5 +25,5 @@ Other available commands:
 ```
 
 ```markdown
-!covid leadboard <infected|deaths|recovered>
+!covid leadboard
 ```
