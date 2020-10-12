@@ -27,3 +27,9 @@ Other available commands:
 ```markdown
 !covid leadboard
 ```
+
+### Hints
+
+- You need to create a `./images` folder on the root directory to store the periodically requested images.
+
+- You can modify the cron jobs at your preference.
