@@ -1,27 +1,23 @@
 require("dotenv").config();
-const path = require('path');
-const fse = require('fs-extra')
+const fse = require('fs-extra');
 const Discord = require("discord.js");
 const levenshtein = require("js-levenshtein");
 const CronJob = require("cron").CronJob;
 
-const { fetchGloablData, downloadImage } = require("./apiService");
+const { downloadImage } = require("./apiService");
 const processCommand = require("./commands");
-const { formatter } = require("./helpers");
 
 const { BOT_TOKEN, CHANNEL_ID } = process.env
 
 const client = new Discord.Client();
 
 const job = new CronJob("0 0 0 * * 6", async () => {
-  const data = await fetchGloablData();
   const channel = client.channels.cache.get(CHANNEL_ID);
-  const textToSend = formatter(data, "Global");
-  const unixTimeAsHash = +new Date()
+  const unixTimeAsHash = +new Date();
   await downloadImage(unixTimeAsHash);
-  const imagePath = `./images/global_graphic_${unixTimeAsHash}.png`
-  const attachment = new Discord.MessageAttachment(imagePath)
-  channel.send(textToSend, attachment);
+  const imagePath = `./images/global_graphic_${unixTimeAsHash}.png`;
+  const attachment = new Discord.MessageAttachment(imagePath);
+  channel.send(attachment);
   console.log("Cron job executed at:", new Date())
 });
 
