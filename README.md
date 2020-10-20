@@ -28,6 +28,17 @@ Other available commands:
 !covid leadboard
 ```
 
+### Config `.env` environment variables
+
+Create a `.env` file in the root of the project with the following env variables:
+
+```
+BOT_TOKEN=
+CHANNEL_ID=
+```
+
+check `env.template` as an example.
+
 ### Hints
 
 - You need to create a `./images` folder on the root directory to store the periodically requested images.
